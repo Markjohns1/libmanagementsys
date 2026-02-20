@@ -13,7 +13,10 @@
     <div class="col-md-6 mb-4">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body">
-                <h5 class="text-secondary mb-3">Total Collection</h5>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="text-secondary mb-0">Total Collection</h5>
+                    <i class="fas fa-layer-group fa-2x text-secondary opacity-50"></i>
+                </div>
                 <h2 class="display-6 fw-bold">{{ total_books }}</h2>
                 <p class="text-muted">Total number of books in the library</p>
             </div>
@@ -24,7 +27,10 @@
     <div class="col-md-6 mb-4">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body">
-                <h5 class="text-success mb-3">Currently Available</h5>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="text-success mb-0">Currently Available</h5>
+                    <i class="fas fa-check-circle fa-2x text-success opacity-50"></i>
+                </div>
                 <h2 class="display-6 fw-bold text-success">{{ available_books }}</h2>
                 <p class="text-muted">Books ready for borrowing</p>
             </div>

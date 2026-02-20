@@ -45,11 +45,9 @@ body {
     border: none !important;
     border-radius: 16px !important;
     box-shadow: var(--card-shadow);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
-    transform: translateY(-5px);
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
@@ -64,7 +62,6 @@ body {
 
 .btn-primary:hover {
     background-color: var(--hover-color);
-    box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.39);
 }
 
 /* --- FORM INPUTS & FOCUS --- */
@@ -73,14 +70,12 @@ body {
     box-shadow: none !important;
     /* Removes the blue Bootstrap ring */
     border-color: var(--primary-color) !important;
-    /* Smoothly changes border to indigo */
     background-color: white !important;
 }
 
 .form-control {
     border: 2px solid #e2e8f0;
     /* Slightly thicker, cleaner borders */
-    transition: border-color 0.2s ease;
 }
 
 /* --- MOBILE RESPONSIVE TWEAKS --- */

@@ -28,8 +28,8 @@ def load_user(user_id):
 with app.app_context():
     db.create_all()
     # Create a default admin user for the student to test with
-    if not User.query.filter_by(username='admin').first():
-        default_admin = User(username='admin', password='password')
+    if not User.query.filter_by(username='Amos').first():
+        default_admin = User(username='Amos', password='amos100')
         db.session.add(default_admin)
         db.session.commit()
 

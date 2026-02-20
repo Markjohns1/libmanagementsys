@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from models import db, Book, Student, BorrowRecord, User
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # Create the flask application instance
 app = Flask(__name__)
@@ -126,8 +126,13 @@ def borrow_book(id):
             db.session.add(student)
             db.session.flush()
         
-        # Create borrow record
-        record = BorrowRecord(book_id=book.id, student_id=student.id)
+        # Create borrow record with a 14-day due date
+        due_limit = datetime.utcnow() + timedelta(days=14)
+        record = BorrowRecord(
+            book_id=book.id, 
+            student_id=student.id,
+            due_date=due_limit
+        )
         book.is_available = False
         db.session.add(record)
         db.session.commit()

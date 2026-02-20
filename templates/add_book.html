@@ -31,4 +31,13 @@
         </div>
     </div>
 </div>
+
+<script>
+    // ISBN Formatting logic: Converts number to 978-XXXXXXXXXX format
+    document.querySelector('input[name="isbn"]').addEventListener('input', function (e) {
+        let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,10})/);
+        // Regex logic to capture 978 and the remaining 10 digits
+        e.target.value = !x[2] ? x[1] : x[1] + '-' + x[2];
+    });
+</script>
 {% endblock %}

@@ -31,9 +31,12 @@
                         <span class="badge bg-success">Available</span>
                         {% else %}
                         <span class="badge bg-danger">Borrowed</span>
-                        <br>
-                        <small class="text-muted">By: {{ book.borrow_records[-1].student.name if book.borrow_records
-                            else 'Unknown' }}</small>
+                        <div class="mt-1">
+                            <small class="text-dark d-block">By: <strong>{{ book.borrows[-1].student.name if
+                                    book.borrows else 'Unknown' }}</strong></small>
+                            <small class="text-muted d-block">Due: {{ book.borrows[-1].due_date.strftime('%Y-%m-%d') if
+                                book.borrows else 'N/A' }}</small>
+                        </div>
                         {% endif %}
                     </td>
                     <td class="text-end">

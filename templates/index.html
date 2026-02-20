@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row text-center mb-5">
+    <div class="col">
+        <h1 class="display-4 fw-bold text-primary">Library Management System</h1>
+        <p class="lead text-muted">Efficiently manage your books and students</p>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Stat card for total books -->
+    <div class="col-md-6 mb-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="text-secondary mb-3">Total Collection</h5>
+                <h2 class="display-6 fw-bold">{{ total_books }}</h2>
+                <p class="text-muted">Total number of books in the library</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stat card for available books -->
+    <div class="col-md-6 mb-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="text-success mb-3">Currently Available</h5>
+                <h2 class="display-6 fw-bold text-success">{{ available_books }}</h2>
+                <p class="text-muted">Books ready for borrowing</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col text-center">
+        <a href="/add_book" class="btn btn-primary btn-lg px-5">Add a New Book</a>
+    </div>
+</div>
+{% endblock %}

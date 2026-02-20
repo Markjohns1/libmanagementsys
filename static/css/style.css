@@ -1,0 +1,26 @@
+/* Main styling for the library application */
+
+/* Add smooth transitions to links and buttons */
+a, .btn {
+    transition: all 0.3s ease;
+}
+
+/* Custom shadow for navbar */
+.navbar {
+    border-bottom: 2px solid rgba(0,0,0,0.05);
+}
+
+/* Round the corners of cards for a modern look */
+.card {
+    border-radius: 12px;
+}
+
+/* Subtle hover effect for table rows */
+.table-hover tbody tr:hover {
+    background-color: rgba(13, 110, 253, 0.03);
+}
+
+/* Logo styling */
+.navbar-brand {
+    letter-spacing: -0.5px;
+}

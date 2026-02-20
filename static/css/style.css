@@ -1,26 +1,84 @@
-/* Main styling for the library application */
+/* --- MARLIZ DESIGN SYSTEM (LMS Edition) --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* Add smooth transitions to links and buttons */
-a, .btn {
-    transition: all 0.3s ease;
+:root {
+    --primary-color: #4f46e5;
+    /* Modern Indigo */
+    --hover-color: #4338ca;
+    --bg-light: #f8fafc;
+    --text-dark: #1e293b;
+    --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
-/* Custom shadow for navbar */
+body {
+    font-family: 'Inter', sans-serif;
+    color: var(--text-dark);
+    background-color: var(--bg-light);
+    line-height: 1.6;
+}
+
+/* --- PREMIUM NAVBAR --- */
 .navbar {
-    border-bottom: 2px solid rgba(0,0,0,0.05);
+    background: linear-gradient(135deg, var(--primary-color), #6366f1) !important;
+    padding: 0.8rem 0;
 }
 
-/* Round the corners of cards for a modern look */
-.card {
-    border-radius: 12px;
-}
-
-/* Subtle hover effect for table rows */
-.table-hover tbody tr:hover {
-    background-color: rgba(13, 110, 253, 0.03);
-}
-
-/* Logo styling */
 .navbar-brand {
-    letter-spacing: -0.5px;
+    font-weight: 700;
+    font-size: 1.4rem;
+    letter-spacing: -1px;
+}
+
+.nav-link {
+    font-weight: 500;
+    padding: 0.5rem 1.2rem !important;
+    border-radius: 8px;
+    margin-left: 5px;
+}
+
+.nav-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* --- MODERN CARDS --- */
+.card {
+    border: none !important;
+    border-radius: 16px !important;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* --- BUTTON SHADOWS --- */
+.btn-primary {
+    background-color: var(--primary-color);
+    border: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    background-color: var(--hover-color);
+    box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.39);
+}
+
+/* --- MOBILE RESPONSIVE TWEAKS --- */
+@media (max-width: 768px) {
+    .navbar-collapse {
+        background: white;
+        margin-top: 15px;
+        border-radius: 12px;
+        padding: 15px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-link {
+        color: var(--text-dark) !important;
+        margin-bottom: 5px;
+    }
 }

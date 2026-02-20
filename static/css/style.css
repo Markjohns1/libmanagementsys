@@ -67,6 +67,22 @@ body {
     box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.39);
 }
 
+/* --- FORM INPUTS & FOCUS --- */
+.form-control:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    /* Removes the blue Bootstrap ring */
+    border-color: var(--primary-color) !important;
+    /* Smoothly changes border to indigo */
+    background-color: white !important;
+}
+
+.form-control {
+    border: 2px solid #e2e8f0;
+    /* Slightly thicker, cleaner borders */
+    transition: border-color 0.2s ease;
+}
+
 /* --- MOBILE RESPONSIVE TWEAKS --- */
 @media (max-width: 768px) {
     .navbar-collapse {

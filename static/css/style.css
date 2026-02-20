@@ -42,7 +42,8 @@ body {
 
 /* --- MODERN CARDS --- */
 .card {
-    border: none !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    /* Subtle defined border */
     border-radius: 16px !important;
     box-shadow: var(--card-shadow);
 }
@@ -73,9 +74,15 @@ body {
     background-color: white !important;
 }
 
-.form-control {
-    border: 2px solid #e2e8f0;
-    /* Slightly thicker, cleaner borders */
+.form-control,
+.form-select,
+.input-group-text {
+    border: 1.5px solid #d1d5db !important;
+    /* Professional defined border */
+}
+
+.input-group-text {
+    background-color: #f9fafb !important;
 }
 
 /* --- MOBILE RESPONSIVE TWEAKS --- */

@@ -40,7 +40,11 @@ def index():
     # Fetch counts for the dashboard
     total_books = Book.query.count()
     available_books = Book.query.filter_by(is_available=True).count()
-    return render_template('index.html', total_books=total_books, available_books=available_books)
+    borrowed_books = total_books - available_books
+    return render_template('index.html', 
+                           total_books=total_books, 
+                           available_books=available_books,
+                           borrowed_books=borrowed_books)
 
 # Route to list all books
 @app.route('/books')

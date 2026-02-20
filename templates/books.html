@@ -11,25 +11,53 @@
         <table class="table table-hover mb-0">
             <thead class="bg-light">
                 <tr>
-                    <th>Title</th>
-                    <th>Author</th>
+                    <th>Book Details</th>
                     <th>ISBN</th>
                     <th>Status</th>
+                    <th class="text-end">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <!-- Loop through books from the database -->
                 {% for book in books %}
                 <tr>
-                    <td>{{ book.title }}</td>
-                    <td>{{ book.author }}</td>
+                    <td>
+                        <div class="fw-bold">{{ book.title }}</div>
+                        <small class="text-muted">{{ book.author }}</small>
+                    </td>
                     <td><code>{{ book.isbn }}</code></td>
                     <td>
                         {% if book.is_available %}
                         <span class="badge bg-success">Available</span>
                         {% else %}
-                        <span class="badge bg-warning text-dark">Borrowed</span>
+                        <span class="badge bg-danger">Borrowed</span>
+                        <br>
+                        <small class="text-muted">By: {{ book.borrow_records[-1].student.name if book.borrow_records
+                            else 'Unknown' }}</small>
                         {% endif %}
+                    </td>
+                    <td class="text-end">
+                        <div class="btn-group">
+                            {% if book.is_available %}
+                            <a href="{{ url_for('borrow_book', id=book.id) }}" class="btn btn-sm btn-outline-primary"
+                                title="Borrow">
+                                <i class="fas fa-hand-holding-heart"></i>
+                            </a>
+                            {% else %}
+                            <a href="{{ url_for('return_book', id=book.id) }}" class="btn btn-sm btn-outline-success"
+                                title="Return">
+                                <i class="fas fa-undo"></i>
+                            </a>
+                            {% endif %}
+                            <a href="{{ url_for('edit_book', id=book.id) }}" class="btn btn-sm btn-outline-secondary"
+                                title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{{ url_for('delete_book', id=book.id) }}" class="btn btn-sm btn-outline-danger"
+                                title="Delete" onclick="return confirm('Remove this book from collection?')">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
                     </td>
                 </tr>
                 {% else %}

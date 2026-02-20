@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm mt-4">
+            <div class="card-body p-4">
+                <h2 class="fw-bold mb-4">Edit Book Details</h2>
+
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Book Title</label>
+                        <input type="text" name="title" class="form-control" value="{{ book.title }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Author Name</label>
+                        <input type="text" name="author" class="form-control" value="{{ book.author }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">ISBN Number</label>
+                        <input type="text" name="isbn" class="form-control" value="{{ book.isbn }}" required>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">Update Book</button>
+                        <a href="/books" class="btn btn-light">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ISBN Formatting logic
+    document.querySelector('input[name="isbn"]').addEventListener('input', function (e) {
+        let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,10})/);
+        e.target.value = !x[2] ? x[1] : x[1] + '-' + x[2];
+    });
+</script>
+{% endblock %}

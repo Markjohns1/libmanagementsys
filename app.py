@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from models import db, Book, Student, BorrowRecord, User
 import os
+from datetime import datetime
 
 # Create the flask application instance
 app = Flask(__name__)
@@ -73,7 +74,6 @@ def logout():
 @login_required
 def add_book():
     if request.method == 'POST':
-        # Create new book from form data
         new_book = Book(
             title=request.form['title'],
             author=request.form['author'],
@@ -84,6 +84,65 @@ def add_book():
         flash('Book added successfully!')
         return redirect(url_for('list_books'))
     return render_template('add_book.html')
+
+# Route to Edit a book
+@app.route('/edit_book/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_book(id):
+    book = Book.query.get_or_404(id)
+    if request.method == 'POST':
+        book.title = request.form['title']
+        book.author = request.form['author']
+        book.isbn = request.form['isbn']
+        db.session.commit()
+        flash('Book updated successfully!')
+        return redirect(url_for('list_books'))
+    return render_template('edit_book.html', book=book)
+
+# Route to Delete a book
+@app.route('/delete_book/<int:id>')
+@login_required
+def delete_book(id):
+    book = Book.query.get_or_404(id)
+    db.session.delete(book)
+    db.session.commit()
+    flash('Book removed from collection!')
+    return redirect(url_for('list_books'))
+
+# Route to Borrow a book
+@app.route('/borrow/<int:id>', methods=['GET', 'POST'])
+@login_required
+def borrow_book(id):
+    book = Book.query.get_or_404(id)
+    if request.method == 'POST':
+        # Create student if not exists (simplified for student project)
+        student = Student.query.filter_by(student_id=request.form['student_id']).first()
+        if not student:
+            student = Student(name=request.form['student_name'], student_id=request.form['student_id'])
+            db.session.add(student)
+            db.session.flush()
+        
+        # Create borrow record
+        record = BorrowRecord(book_id=book.id, student_id=student.id)
+        book.is_available = False
+        db.session.add(record)
+        db.session.commit()
+        flash(f'Book borrowed by {student.name}!')
+        return redirect(url_for('list_books'))
+    return render_template('borrow.html', book=book)
+
+# Route to Return a book
+@app.route('/return/<int:id>')
+@login_required
+def return_book(id):
+    book = Book.query.get_or_404(id)
+    record = BorrowRecord.query.filter_by(book_id=id, return_date=None).first()
+    if record:
+        record.return_date = datetime.utcnow()
+        book.is_available = True
+        db.session.commit()
+        flash('Book returned successfully!')
+    return redirect(url_for('list_books'))
 
 # Start the application in debug mode
 if __name__ == '__main__':

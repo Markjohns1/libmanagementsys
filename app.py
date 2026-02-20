@@ -9,7 +9,7 @@ app = Flask(__name__)
 # Secret key for session security
 app.config['SECRET_KEY'] = 'library_secret_key_123'
 # Configuration for the SQLite database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///library.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///library_v2.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize login manager

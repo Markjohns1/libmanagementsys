@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-0">System Monitoring</h2>
+        <p class="text-muted small mb-0">Track all system activities and user actions</p>
+    </div>
+    <a href="{{ url_for('backup_data') }}" class="btn btn-primary px-4">
+        <i class="fas fa-download me-2"></i> Backup Database
+    </a>
+</div>
+
+<div class="card border-0 shadow-sm overflow-hidden">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="bg-light text-muted small text-uppercase fw-bold">
+                <tr>
+                    <th class="ps-4">Timestamp</th>
+                    <th>User</th>
+                    <th>Action</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                <tr>
+                    <td class="ps-4 small text-muted">{{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                    <td>
+                        {% if log.user %}
+                        <span class="fw-semibold small">{{ log.user.full_name }}</span>
+                        <span class="text-muted small">(@{{ log.user.username }})</span>
+                        {% else %}
+                        <span class="text-muted small">System</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if log.action == 'LOGIN' %}
+                        <span class="badge bg-soft-success">LOGIN</span>
+                        {% elif log.action == 'LOGOUT' %}
+                        <span class="badge bg-soft-warning">LOGOUT</span>
+                        {% elif log.action == 'BORROW' %}
+                        <span class="badge bg-soft-primary">BORROW</span>
+                        {% elif log.action == 'RETURN' %}
+                        <span class="badge bg-info text-white">RETURN</span>
+                        {% elif log.action == 'ADD_BOOK' %}
+                        <span class="badge bg-primary">ADD BOOK</span>
+                        {% elif log.action == 'USER_MGMT' %}
+                        <span class="badge bg-danger">USER MGMT</span>
+                        {% elif log.action == 'BACKUP' %}
+                        <span class="badge bg-dark">BACKUP</span>
+                        {% else %}
+                        <span class="badge bg-secondary">{{ log.action }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="small">{{ log.details }}</td>
+                </tr>
+                {% endfor %}
+
+                {% if not logs %}
+                <tr>
+                    <td colspan="4" class="p-5 text-start text-muted">
+                        <p class="mb-0">No activity logs recorded yet. Actions will appear here automatically.</p>
+                    </td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

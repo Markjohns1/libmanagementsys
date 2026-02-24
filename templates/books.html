@@ -1,75 +1,132 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="fw-bold">Library Collection</h2>
-    <a href="/add_book" class="btn btn-primary">Add Book</a>
-</div>
-
-<div class="card border-0 shadow-sm">
-    <div class="card-body p-0">
-        <table class="table table-hover mb-0">
-            <thead class="bg-light">
-                <tr>
-                    <th>Book Details</th>
-                    <th>ISBN</th>
-                    <th>Status</th>
-                    <th class="text-end">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Loop through books from the database -->
-                {% for book in books %}
-                <tr>
-                    <td>
-                        <div class="fw-bold">{{ book.title }}</div>
-                        <small class="text-muted">{{ book.author }}</small>
-                    </td>
-                    <td><code>{{ book.isbn }}</code></td>
-                    <td>
-                        {% if book.is_available %}
-                        <span class="badge bg-success">Available</span>
-                        {% else %}
-                        <span class="badge bg-danger">Borrowed</span>
-                        <div class="mt-1">
-                            <small class="text-dark d-block">By: <strong>{{ book.borrows[-1].student.name if
-                                    book.borrows else 'Unknown' }}</strong></small>
-                            <small class="text-muted d-block">Due: {{ book.borrows[-1].due_date.strftime('%Y-%m-%d') if
-                                book.borrows else 'N/A' }}</small>
-                        </div>
-                        {% endif %}
-                    </td>
-                    <td class="text-end">
-                        <div class="btn-group">
-                            {% if book.is_available %}
-                            <a href="{{ url_for('borrow_book', id=book.id) }}" class="btn btn-sm btn-outline-primary"
-                                title="Borrow">
-                                <i class="fas fa-hand-holding-heart"></i>
-                            </a>
-                            {% else %}
-                            <a href="{{ url_for('return_book', id=book.id) }}" class="btn btn-sm btn-outline-success"
-                                title="Return">
-                                <i class="fas fa-undo"></i>
-                            </a>
-                            {% endif %}
-                            <a href="{{ url_for('edit_book', id=book.id) }}" class="btn btn-sm btn-outline-secondary"
-                                title="Edit">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <a href="{{ url_for('delete_book', id=book.id) }}" class="btn btn-sm btn-outline-danger"
-                                title="Delete" onclick="return confirm('Remove this book from collection?')">
-                                <i class="fas fa-trash"></i>
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-                {% else %}
-                <tr>
-                    <td colspan="4" class="text-center text-muted py-4">No books found in the collection.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+<div class="row align-items-center mb-4 g-3">
+    <div class="col-md-6">
+        <h2 class="fw-bold mb-0">Book Catalogue</h2>
+        <p class="text-muted small mb-0">Search and discover books in our collection</p>
+    </div>
+    <div class="col-md-6">
+        <form class="d-flex" action="{{ url_for('list_books') }}" method="GET">
+            <div class="input-group search-bar">
+                <span class="input-group-text bg-white border-end-0 ps-3"><i
+                        class="fas fa-search text-muted"></i></span>
+                <input type="text" name="search" class="form-control border-start-0 py-2"
+                    placeholder="Search by title, author, or ISBN..." value="{{ request.args.get('search', '') }}">
+                <button class="btn btn-primary px-4 ms-2 shadow-sm" type="submit">Search</button>
+            </div>
+        </form>
     </div>
 </div>
+
+<div class="row g-4">
+    {% for book in books %}
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="badge {{ 'bg-soft-success' if book.is_available else 'bg-soft-danger' }}">
+                        {{ 'Available' if book.is_available else 'Borrowed' }}
+                    </span>
+                    <span class="text-muted small"><i class="fas fa-hashtag me-1"></i> {{ book.isbn }}</span>
+                </div>
+                <h5 class="fw-bold text-dark mb-1">{{ book.title }}</h5>
+                <p class="text-muted mb-3"><i class="fas fa-pen-nib me-1"></i> {{ book.author }}</p>
+
+                <div class="bg-light p-3 rounded-3 mb-3">
+                    <div class="d-flex justify-content-between small">
+                        <span class="text-muted">Category:</span>
+                        <span class="fw-bold text-dark">{{ book.category or 'General' }}</span>
+                    </div>
+                </div>
+
+                {% if not book.is_available %}
+                {% set active_borrow = book.borrows|selectattr('return_date', 'none')|first %}
+                {% if active_borrow %}
+                <div class="bg-soft-danger p-3 rounded-3 mb-3 small">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="text-muted">Borrowed by:</span>
+                        <span class="fw-bold">{{ active_borrow.user.full_name }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="text-muted">Borrow date:</span>
+                        <span>{{ active_borrow.borrow_date.strftime('%Y-%m-%d') }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted">Due date:</span>
+                        <span class="fw-bold {% if active_borrow.due_date < datetime_now %}text-danger{% endif %}">
+                            {{ active_borrow.due_date.strftime('%Y-%m-%d') }}
+                            {% if active_borrow.due_date < datetime_now %} (OVERDUE){% endif %} </span>
+                    </div>
+                </div>
+                {% endif %}
+                {% endif %}
+
+                <div class="d-flex gap-2">
+                    {% if book.is_available %}
+                    {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('borrow_book', id=book.id) }}" class="btn btn-primary flex-grow-1">
+                        Borrow
+                    </a>
+                    {% else %}
+                    <a href="{{ url_for('login') }}" class="btn btn-outline-primary flex-grow-1">Login to
+                        Borrow</a>
+                    {% endif %}
+                    {% else %}
+                    {# Only show Return if librarian OR the student who borrowed it #}
+                    {% if current_user.is_authenticated %}
+                    {% set active_rec = book.borrows|selectattr('return_date', 'none')|first %}
+                    {% if current_user.role == 'librarian' or (active_rec and active_rec.user_id == current_user.id) %}
+                    <a href="{{ url_for('return_book', id=book.id) }}" class="btn btn-outline-success flex-grow-1">
+                        Return
+                    </a>
+                    {% else %}
+                    <span class="btn btn-light flex-grow-1 disabled">Unavailable</span>
+                    {% endif %}
+                    {% else %}
+                    <span class="btn btn-light flex-grow-1 disabled">Unavailable</span>
+                    {% endif %}
+                    {% endif %}
+
+                    {% if current_user.is_authenticated and current_user.role == 'librarian' %}
+                    <div class="dropdown">
+                        <button class="btn btn-light px-3" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
+                            <li><a class="dropdown-item" href="{{ url_for('edit_book', id=book.id) }}"><i
+                                        class="fas fa-edit me-2"></i> Edit</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item text-danger" href="{{ url_for('delete_book', id=book.id) }}"
+                                    onclick="return confirm('Delete this book?')"><i class="fas fa-trash me-2"></i>
+                                    Delete</a></li>
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% if not books %}
+    <div class="col-12">
+        <div class="text-start p-5 bg-white rounded-3 shadow-sm">
+            <h3>No books found</h3>
+            <p class="text-muted">Try a different search term or check back later.</p>
+            <a href="{{ url_for('list_books') }}" class="btn btn-outline-primary px-4">Clear All
+                Filters</a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .search-bar .form-control:focus {
+        box-shadow: none;
+        border-color: #dee2e6;
+    }
+</style>
 {% endblock %}

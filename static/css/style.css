@@ -1,118 +1,158 @@
-/* --- MARLIZ DESIGN SYSTEM (LMS Edition) --- */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
+/* --- PROFESSIONAL DESIGN SYSTEM --- */
 :root {
-    --primary-color: #4f46e5;
-    /* Modern Indigo */
-    --hover-color: #4338ca;
-    --bg-light: #f8fafc;
-    --text-dark: #1e293b;
-    --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --secondary: #d97706;
+    --accent: #059669;
+    --bg-main: #f1f5f9;
+    --card-bg: #ffffff;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+    --radius: 6px;
 }
 
-html,
 body {
-    height: 100%;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
     font-family: 'Inter', sans-serif;
-    color: var(--text-dark);
-    background-color: var(--bg-light);
-    line-height: 1.6;
+    color: var(--text-main);
+    background-color: var(--bg-main);
+    line-height: 1.5;
 }
 
-/* --- PREMIUM NAVBAR --- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.navbar-brand {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+}
+
+/* --- NAVBAR --- */
 .navbar {
-    background: linear-gradient(135deg, var(--primary-color), #6366f1) !important;
-    padding: 0.8rem 0;
+    background: #0f172a !important;
+    padding: 0.75rem 0;
+    z-index: 1030;
 }
 
 .navbar-brand {
-    font-weight: 700;
-    font-size: 1.4rem;
-    letter-spacing: -1px;
+    font-size: 1.25rem;
 }
 
 .nav-link {
     font-weight: 500;
-    padding: 0.5rem 1.2rem !important;
-    border-radius: 8px;
-    margin-left: 5px;
+    padding: 0.5rem 0.75rem !important;
 }
 
-.nav-link:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-/* --- MODERN CARDS --- */
+/* --- CARDS --- */
 .card {
-    border: 1px solid rgba(0, 0, 0, 0.08) !important;
-    /* Subtle defined border */
-    border-radius: 16px !important;
-    box-shadow: var(--card-shadow);
+    background: var(--card-bg);
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--radius) !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
-.card:hover {
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-}
-
-/* --- BUTTON SHADOWS --- */
-.btn-primary {
-    background-color: var(--primary-color);
-    border: none;
-    padding: 0.6rem 1.5rem;
-    border-radius: 10px;
+/* --- BUTTONS --- */
+.btn {
+    border-radius: var(--radius) !important;
+    padding: 0.5rem 1rem;
     font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.btn-primary {
+    background: var(--primary);
+    border: none;
 }
 
 .btn-primary:hover {
-    background-color: var(--hover-color);
+    background: var(--primary-hover);
 }
 
-/* --- FORM INPUTS & FOCUS --- */
-.form-control:focus {
-    outline: none !important;
-    box-shadow: none !important;
-    /* Removes the blue Bootstrap ring */
-    border-color: var(--primary-color) !important;
-    background-color: white !important;
+.btn-warning {
+    background: var(--secondary);
+    border: none;
+    color: #fff;
 }
 
+.btn-white-outline {
+    border: 1px solid #fff;
+    color: #fff;
+}
+
+.btn-white-outline:hover {
+    background: #fff;
+    color: #0f172a;
+}
+
+/* --- FORMS --- */
 .form-control,
-.form-select,
-.input-group-text {
-    border: 1.5px solid #d1d5db !important;
-    /* Professional defined border */
+.form-select {
+    border-radius: var(--radius);
+    padding: 0.625rem 0.75rem;
+    border: 1px solid var(--border-color);
+    font-size: 0.875rem;
 }
 
-.input-group-text {
-    background-color: #f9fafb !important;
+.form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
 }
 
-/* --- MOBILE RESPONSIVE TWEAKS --- */
-@media (max-width: 768px) {
-    .navbar-collapse {
-        background: white;
-        margin-top: 15px;
-        border-radius: 12px;
-        padding: 15px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-
-    .nav-link {
-        color: var(--text-dark) !important;
-        margin-bottom: 5px;
-    }
+/* --- UTILITIES --- */
+.bg-soft-primary {
+    background: #eff6ff;
+    color: var(--primary);
 }
 
-/* --- PROFESSIONAL CODE TAGS (ISBN) --- */
-code {
-    color: var(--primary-color) !important;
-    background-color: rgba(79, 70, 229, 0.05);
-    padding: 0.2rem 0.4rem;
-    border-radius: 4px;
+.bg-soft-success {
+    background: #f0fdf4;
+    color: var(--accent);
+}
+
+.bg-soft-warning {
+    background: #fffbeb;
+    color: var(--secondary);
+}
+
+.bg-soft-danger {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.badge {
+    padding: 0.35rem 0.5rem;
     font-weight: 600;
+    font-size: 0.75rem;
+    border-radius: 4px;
+}
+
+/* Sticky Offset */
+main {
+    padding-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* No Decorations */
+* {
+    animation: none !important;
+    transition: none !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+}
+
+.card,
+.btn,
+.form-control {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+.table th {
+    background: #f8fafc;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border-bottom: 2px solid var(--border-color);
 }

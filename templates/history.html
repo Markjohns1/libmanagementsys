@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">Borrowing History</h2>
+    <span class="badge bg-soft-primary px-3 py-2 border border-primary border-opacity-25 text-primary">
+        <i class="fas fa-list-ul me-2"></i> {{ history|length }} Total Records
+    </span>
+</div>
+
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="bg-light text-muted small text-uppercase fw-bold">
+                <tr>
+                    <th class="ps-4">Book Title</th>
+                    {% if current_user.role != 'student' %}
+                    <th>Borrower</th>
+                    {% endif %}
+                    <th>Borrowed Date</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                    <th class="text-end pe-4">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in history %}
+                <tr>
+                    <td class="ps-4">
+                        <div class="fw-bold text-dark">{{ record.book.title }}</div>
+                        <div class="small text-muted">{{ record.book.author }}</div>
+                    </td>
+                    {% if current_user.role != 'student' %}
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div class="bg-soft-primary rounded-circle p-2 me-2"
+                                style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-user small"></i>
+                            </div>
+                            <span class="small fw-semibold">{{ record.user.full_name }}</span>
+                        </div>
+                    </td>
+                    {% endif %}
+                    <td class="small">{{ record.borrow_date.strftime('%Y-%m-%d') }}</td>
+                    <td class="small">{{ record.due_date.strftime('%Y-%m-%d') }}</td>
+                    <td>
+                        {% if record.return_date %}
+                        <span class="badge bg-soft-success">Returned</span>
+                        <div class="text-muted small mt-1" style="font-size: 0.7rem;">On {{
+                            record.return_date.strftime('%Y-%m-%d') }}</div>
+                        {% elif record.due_date < datetime_now %} <span class="badge bg-soft-danger animate-pulse">
+                            Overdue</span>
+                            {% else %}
+                            <span class="badge bg-soft-warning">Active</span>
+                            {% endif %}
+                    </td>
+                    <td class="text-end pe-4">
+                        {% if not record.return_date %}
+                        <a href="{{ url_for('return_book', id=record.book.id) }}"
+                            class="btn btn-sm btn-outline-primary px-3">
+                            Return Book
+                        </a>
+                        {% else %}
+                        <button class="btn btn-sm btn-light px-3 disabled">Completed</button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% if not history %}
+                <tr>
+                    <td colspan="6" class="p-5 text-start text-muted">
+                        <p>No borrowing history found.</p>
+                        <a href="{{ url_for('list_books') }}" class="btn btn-primary px-4">Browse Books</a>
+                    </td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .animate-pulse {
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0.5;
+        }
+
+        100% {
+            opacity: 1;
+        }
+    }
+</style>
+{% endblock %}

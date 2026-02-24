@@ -1,43 +1,63 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card border-0 shadow-sm mt-4">
-            <div class="card-body p-4">
-                <h2 class="fw-bold mb-4">Add New Book</h2>
-
-                <!-- Form for creating a new book entry -->
+    <div class="col-md-7">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+            <div class="card-header bg-white border-bottom p-4">
+                <div class="d-flex align-items-center">
+                    <div class="bg-soft-primary rounded-circle p-3 me-3">
+                        <i class="fas fa-book-medical text-primary"></i>
+                    </div>
+                    <div>
+                        <h4 class="fw-bold mb-0">Add New Book</h4>
+                        <p class="text-muted small mb-0">Expand the library collection</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body p-4 p-md-5">
                 <form method="POST">
-                    <div class="mb-3">
-                        <label class="form-label">Book Title</label>
-                        <input type="text" name="title" class="form-control" placeholder="Enter book title" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Author Name</label>
-                        <input type="text" name="author" class="form-control" placeholder="Enter author name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">ISBN Number</label>
-                        <input type="text" name="isbn" class="form-control" placeholder="e.g. 978-0123456789" required>
+                    <div class="row g-4">
+                        <div class="col-12">
+                            <label class="form-label fw-bold small text-uppercase">Book Title</label>
+                            <input type="text" name="title" class="form-control bg-light"
+                                placeholder="e.g. The Great Gatsby" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small text-uppercase">Author Name</label>
+                            <input type="text" name="author" class="form-control bg-light"
+                                placeholder="e.g. F. Scott Fitzgerald" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small text-uppercase">ISBN</label>
+                            <input type="text" name="isbn" class="form-control bg-light"
+                                placeholder="e.g. 9781234567890" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold small text-uppercase">Category / Genre</label>
+                            <select name="category" class="form-select bg-light">
+                                <option value="Fiction">Fiction</option>
+                                <option value="Non-Fiction">Non-Fiction</option>
+                                <option value="Science">Science</option>
+                                <option value="History">History</option>
+                                <option value="Technology">Technology</option>
+                                <option value="Literature">Literature</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary btn-lg">Save Book</button>
-                        <a href="/books" class="btn btn-light">Cancel</a>
+                    <hr class="my-5 opacity-10">
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary px-5 py-3 fw-bold flex-grow-1">
+                            Save to Collection <i class="fas fa-save ms-2"></i>
+                        </button>
+                        <a href="{{ url_for('list_books') }}" class="btn btn-light px-5 py-3 fw-bold">Cancel</a>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
-<script>
-    // ISBN Formatting logic: Converts number to 978-XXXXXXXXXX format
-    document.querySelector('input[name="isbn"]').addEventListener('input', function (e) {
-        let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,10})/);
-        // Regex logic to capture 978 and the remaining 10 digits
-        e.target.value = !x[2] ? x[1] : x[1] + '-' + x[2];
-    });
-</script>
 {% endblock %}

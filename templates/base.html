@@ -4,81 +4,142 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Library Management System</title>
-  <!-- Bootstrap CSS for modern styling -->
+  <title>LibraryHub | Management System</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- custom CSS link -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-  <!-- Font Awesome for professional icons -->
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
-<body class="bg-light">
+<body class="bg-light d-flex flex-column min-vh-100">
 
-  <!-- Main Navigation Bar -->
-  <nav class="navbar navbar-expand-lg navbar-dark shadow-sm mb-4">
+  <!-- Permanent Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
     <div class="container">
-      <a class="navbar-brand" href="/"><i class="fas fa-book-reader me-2"></i> LibraryHub</a>
-      {% if current_user.is_authenticated %}
-      <!-- Mobile Toggle Button (Only for Staff) -->
-      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#marlizNav">
+      <a class="navbar-brand" href="/"><i class="fas fa-book-open-reader me-2"></i> LibraryHub</a>
+
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="marlizNav">
-        <div class="navbar-nav ms-auto">
-          <a class="nav-link" href="/"><i class="fas fa-chart-line me-1"></i> Dashboard</a>
-          <a class="nav-link" href="/books"><i class="fas fa-book me-1"></i> Books</a>
-          <a class="nav-link" href="/add_book"><i class="fas fa-plus-circle me-1"></i> Add Book</a>
-          <a class="nav-link text-warning fw-bold" href="/logout"><i class="fas fa-sign-out-alt me-1"></i> Logout</a>
+
+      <div class="collapse navbar-collapse" id="mainNav">
+        <div class="navbar-nav ms-lg-auto">
+          <a class="nav-link" href="/"><i class="fas fa-home-alt me-1"></i> Home</a>
+          <a class="nav-link" href="/books"><i class="fas fa-search me-1"></i> Browse Books</a>
+
+          {% if current_user.is_authenticated %}
+          <a class="nav-link" href="/history"><i class="fas fa-history me-1"></i> My History</a>
+
+          {% if current_user.role == 'librarian' %}
+          <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-tools me-1"></i> Management
+            </a>
+            <ul class="dropdown-menu border-0 shadow">
+              <li><a class="dropdown-item" href="/add_book"><i class="fas fa-plus me-2"></i> Add New Book</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item" href="/users"><i class="fas fa-users me-2"></i> Manage Users</a></li>
+              <li><a class="dropdown-item" href="/monitoring"><i class="fas fa-chart-line me-2"></i> System
+                  Monitoring</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item" href="/backup"><i class="fas fa-database me-2"></i> Backup Data</a></li>
+            </ul>
+          </div>
+          {% endif %}
+
+          <div class="nav-item dropdown">
+            <a class="nav-link position-relative" href="#" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-bell"></i>
+              {% if notifications %}
+              <span class="position-absolute top-1 start-100 translate-middle badge bg-danger"
+                style="font-size: 0.6rem;">
+                {{ notifications|length }}
+              </span>
+              {% endif %}
+            </a>
+            <ul class="dropdown-menu border-0 shadow-lg py-0" style="width: 280px;">
+              <li class="bg-primary text-white p-3">
+                <h6 class="mb-0">Notifications</h6>
+              </li>
+              {% if notifications %}
+              {% for note in notifications[:5] %}
+              <li class="p-3 border-bottom small">
+                {{ note.message }}
+                <div class="text-muted mt-1" style="font-size: 0.7rem;">{{ note.created_at.strftime('%Y-%m-%d %H:%M') }}
+                </div>
+              </li>
+              {% endfor %}
+              {% else %}
+              <li class="p-4 text-center text-muted">No notifications</li>
+              {% endif %}
+            </ul>
+          </div>
+
+          <div class="nav-item dropdown ms-lg-3">
+            <a class="nav-link dropdown-toggle btn btn-white-outline px-3" href="#" role="button"
+              data-bs-toggle="dropdown">
+              <i class="fas fa-user-circle me-1"></i> {{ current_user.username }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
+              <li><span class="dropdown-item-text text-muted small">{{ current_user.role|capitalize }}</span></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item text-danger" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>
+                  Logout</a></li>
+            </ul>
+          </div>
+          {% else %}
+          <div class="navbar-nav text-center ms-lg-auto">
+            <a class="btn btn-primary ms-lg-3 px-4 mb-2 mb-lg-0" href="/login">Login</a>
+            <a class="btn btn-warning ms-lg-2 px-4" href="/register">Register</a>
+          </div>
+          {% endif %}
         </div>
       </div>
-      {% endif %}
     </div>
   </nav>
+
   <!-- Content Area -->
-  <div class="container mt-4">
-    <!-- Flash messages for user feedback -->
-    {% with messages = get_flashed_messages() %}
+  <main class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-info alert-dismissible fade show">
-      {{ message }}
-      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    {% for category, message in messages %}
+    <div
+      class="alert alert-{{ category if category != 'message' else 'info' }} alert-dismissible fade show border-0 mb-4"
+      role="alert">
+      <i class="fas fa-info-circle me-2"></i> {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     {% endfor %}
     {% endif %}
     {% endwith %}
 
     {% block content %}{% endblock %}
-  </div>
+  </main>
 
-  <!-- Simple Professional Footer -->
+  <!-- Clean Footer -->
   <footer class="mt-auto py-4 bg-white border-top">
-    <div class="container text-center">
-      <p class="text-muted small mb-0">
-        &copy;
-        <script>document.write(new Date().getFullYear())</script> <strong>LibraryHub</strong>
+    <div class="container text-start">
+      <p class="text-muted mb-0 small">
+        &copy; 2026 <strong>LibraryHub</strong>. All rights reserved. Professional Library Management.
       </p>
     </div>
   </footer>
 
   <!-- Bootstrap JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Auto-dismiss flash messages after 3 seconds -->
-  <script>
-    setTimeout(function () {
-      let alerts = document.querySelectorAll('.alert');
-      alerts.forEach(function (alert) {
-        if (bootstrap.Alert.getInstance(alert)) {
-          let bsAlert = new bootstrap.Alert(alert);
-          bsAlert.close();
-        } else {
-          alert.remove();
-        }
-      });
-    }, 3000);
-  </script>
 </body>
 
 </html>

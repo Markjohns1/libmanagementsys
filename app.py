@@ -10,7 +10,7 @@ from flask import send_file
 # Create the flask application instance
 app = Flask(__name__)
 # Secret key for session security
-app.config['SECRET_KEY'] = 'library_secret_key_123'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'library_secret_key_123')
 # Configuration for the SQLite database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///library_v3.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
